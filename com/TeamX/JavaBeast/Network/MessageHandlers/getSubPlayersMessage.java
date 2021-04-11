@@ -11,7 +11,7 @@ public class getSubPlayersMessage implements MessageHandler {
     public void onReceive(byte[] byteMessage, String strMessage, String[] args, Client client) {
         if(args[0].equals("getSubPlayers")){
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("setSupPlayers "+ Main.getTeamXServer().getServerName()+" ");
+            stringBuilder.append("setPlayers "+ Main.getTeamXServer().getServerName()+" ");
 
             for(Player player: Bukkit.getOnlinePlayers()){
                 stringBuilder.append(player.getName()+";");

@@ -100,6 +100,14 @@ public class Server {
         return receiveBufferSize;
     }
 
+    public boolean isSubServer(){
+        return isSubServer;
+    }
+
+    public String getMainServer(){
+        return mainServer;
+    }
+
     public void registerMessageHandler(MessageHandler messageHandler) {
         this.messageHandlers.add(messageHandler);
     }
@@ -202,10 +210,14 @@ public class Server {
 
                         String msg = new String(_bytes);
 
-                        Main.getCmd().sendMessage("[§bTeamX§7]§a Received message : "+msg);
-                        Main.getTeamXServer().Log("Received message : "+msg);
+                        String[] MSG = msg.split("/");
 
-                        Main.getTeamXServer().received(_bytes, msg, null);
+                        for(String s:MSG) {
+                            Main.getCmd().sendMessage("[§bTeamX§7]§a Received message : " + s);
+                            Main.getTeamXServer().Log("Received message : " + s);
+
+                            Main.getTeamXServer().received(s.getBytes(StandardCharsets.UTF_8), s, null);
+                        }
 
                     } catch (Exception exception) {
 
@@ -249,6 +261,8 @@ public class Server {
                         }
 
                         clients.add(client);
+                        CLIENTS.add(client);
+
 
                         Thread.sleep(throttle);
                     } catch (Exception exception) {
@@ -319,7 +333,7 @@ public class Server {
     public void StrToMain(String msg){
         try {
             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-            outputStream.write(msg.getBytes(StandardCharsets.UTF_8));
+            outputStream.write((msg+"/").getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
 
             Main.getCmd().sendMessage("[§bTeamX§7] §aSent msg : "+msg);

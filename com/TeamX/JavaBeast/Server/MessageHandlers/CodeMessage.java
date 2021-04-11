@@ -14,8 +14,8 @@ public class CodeMessage implements MessageHandler {
 
                 switch(code){
                     case "0":
-                        Main.getCmd().sendMessage("[§bTeamX§7]§a Now connected as subServer.");
-                        Main.getTeamXServer().Log("Now connected as subServer.");
+                        Main.getCmd().sendMessage("[§bTeamX§7]§a Command executed.");
+                        Main.getTeamXServer().Log("Command executed.");
                         break;
                     case "101":
                         Main.getCmd().sendMessage("[§bTeamX§7]§4 subServer connection refused (no subServers allowed)");
@@ -27,8 +27,8 @@ public class CodeMessage implements MessageHandler {
                         break;
                 }
 
-                if(args.length == 2){
-                    Main.getCmd().sendMessage("[§bTeamX§7]§4 Additional info: \n  "+args[1]);
+                if(args.length == 3){
+                    Main.getCmd().sendMessage("[§bTeamX§7]§4 Additional info: \n  "+args[2]);
                 }
 
             }

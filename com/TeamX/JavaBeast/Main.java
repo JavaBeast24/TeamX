@@ -1,8 +1,8 @@
 package com.TeamX.JavaBeast;
 
 import com.TeamX.JavaBeast.Network.Data;
-import com.TeamX.JavaBeast.Network.EventHandler;
 import com.TeamX.JavaBeast.Network.MessageHandlers.*;
+import com.TeamX.JavaBeast.Network.MyEventHandler;
 import com.TeamX.JavaBeast.Server.MessageHandlers.CodeMessage;
 import com.TeamX.JavaBeast.Server.MessageHandlers.StopMessage;
 import com.TeamX.JavaBeast.Server.MessageHandlers.SubServerMessage;
@@ -73,6 +73,8 @@ public class Main extends JavaPlugin {
                 server.registerMessageHandler(new SetPlayerAmountMessage());
                 server.registerMessageHandler(new getPlayersMessage());
                 server.registerMessageHandler(new SetPlayersMessage());
+                server.registerMessageHandler(new addPlayerMessage());
+                server.registerMessageHandler(new removePlayerMessage());
 
                 data = new Data(server);
             }else{
@@ -84,7 +86,7 @@ public class Main extends JavaPlugin {
         }
 
 
-        Bukkit.getPluginManager().registerEvents(new EventHandler(), this);
+        Bukkit.getPluginManager().registerEvents(new MyEventHandler(), this);
     }
 
     @Override

@@ -36,6 +36,7 @@ public class SubServerMessage implements MessageHandler {
 
                 client.setName(args[1]);
                 Main.getTeamXServer().subServer.add(client);
+                Main.getTeamXServer().CLIENTS.remove(client);
 
                 ClientRegisterAsSubServerEvent event = new ClientRegisterAsSubServerEvent(client, args[1]);
                 Bukkit.getPluginManager().callEvent(event);

@@ -70,32 +70,40 @@ public class Client {
                 while (isRunning) {
                     try {
 
-                        if(!(dataInputStream.available() > 0)){
-                            if(socket.isClosed()){
-                                Main.getCmd().sendMessage("[§bTeamX§7]§4 Incorrect client quit! -> closing.");
-                                stop();
-                                break;
-                            }else
-                                continue;
+                        try {
+
+                            if (!(dataInputStream.available() > 0)) {
+                                if (socket.isClosed()) {
+                                    Main.getCmd().sendMessage("[§bTeamX§7]§4 Incorrect client quit! -> closing.");
+                                    stop();
+                                    break;
+                                } else
+                                    continue;
+                            }
+
+                            byte[] _bytes;
+
+                            if (dataInputStream.available() < receiveBufferSize) {
+                                _bytes = new byte[dataInputStream.available()];
+                            } else
+                                _bytes = new byte[receiveBufferSize];
+
+
+                            dataInputStream.read(_bytes);
+
+                            String msg = new String(_bytes);
+
+                            String[] MSG = msg.split("/");
+
+                            for(String s:MSG) {
+                                Main.getCmd().sendMessage("[§bTeamX§7]§a Received message : " + s);
+                                Main.getTeamXServer().Log("Received message : " + s);
+
+                                Main.getTeamXServer().received(s.getBytes(StandardCharsets.UTF_8), s, self);
+                            }
+                        }catch(NullPointerException exception){
+
                         }
-
-                        byte[] _bytes;
-
-                        if(dataInputStream.available() < receiveBufferSize){
-                            _bytes = new byte[dataInputStream.available()];
-                        }else
-                            _bytes = new byte[receiveBufferSize];
-
-
-                        dataInputStream.read(_bytes);
-
-                        String msg = new String(_bytes);
-
-                        Main.getCmd().sendMessage("[§bTeamX§7]§a Received message : "+msg);
-                        Main.getTeamXServer().Log("Received message : "+msg+" from Client : "+getName());
-
-                        Main.getTeamXServer().received(_bytes, msg, self);
-
                     } catch (Exception exception) {
                         Main.getCmd().sendMessage("[§bTeamX§7] §4Error while receiving message : " + exception.getMessage() + " -> disconnecting client.");
                         Main.getTeamXServer().Log("Error while receiving message : " + exception.getMessage() + " -> disconnecting client.");
@@ -113,7 +121,7 @@ public class Client {
     public boolean sendStrMessage(String msg){
         try {
             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
-            outputStream.write(msg.getBytes(StandardCharsets.UTF_8));
+            outputStream.write((msg+"/").getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
             return true;
         }catch(Exception exception){

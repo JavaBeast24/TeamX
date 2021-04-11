@@ -1,6 +1,7 @@
 package com.TeamX.JavaBeast.Network.MessageHandlers;
 
 import com.TeamX.JavaBeast.Main;
+import com.TeamX.JavaBeast.Network.Broadcaster;
 import com.TeamX.JavaBeast.Server.Client;
 import com.TeamX.JavaBeast.Server.MessageHandler;
 
@@ -18,6 +19,8 @@ public class SetPlayersMessage implements MessageHandler {
                     String[] playerNames = args[2].split(";");
 
                     Main.getInstance().getData().serverPlayers.put(server, Arrays.asList(playerNames));
+
+                    Broadcaster.BroadCastPlayers();
 
                     client.sendStrMessage("code 0");
                 }else
