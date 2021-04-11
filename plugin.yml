@@ -1,0 +1,7 @@
+name: TeamX
+version: 2.0
+main: com.TeamX.JavaBeast.Main
+database: false
+website: javabeast.bplaced.net
+author: JavaBeast
+description: a advanced Plugin to help you and your Team control the server
