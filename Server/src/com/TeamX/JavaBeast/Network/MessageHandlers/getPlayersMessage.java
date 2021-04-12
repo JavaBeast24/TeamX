@@ -38,6 +38,9 @@ public class getPlayersMessage implements MessageHandler {
                         stringBuilder.append(s+";");
                     }
 
+                    client.sendStrMessage(stringBuilder.toString());
+                    client.sendStrMessage("code 0");
+
                 }else
                     client.sendStrMessage("code 302");
 

@@ -151,8 +151,8 @@ public class Server {
                 Main.getCmd().sendMessage("[§bTeamX§7]§a Server is now online!");
 
             } catch (Exception exception) {
-                Main.getCmd().sendMessage("[§bTeamX§7]§4 failed to start server : " + exception.getMessage() + " -> disabling plugin.");
-                Bukkit.getPluginManager().disablePlugin(Main.getInstance());
+                //Main.getCmd().sendMessage("[§bTeamX§7]§4 failed to start server : " + exception.getMessage() + " -> disabling plugin.");
+                //Bukkit.getPluginManager().disablePlugin(Main.getInstance());
             }
         }else{
             try{

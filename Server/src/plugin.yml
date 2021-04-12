@@ -5,3 +5,11 @@ database: false
 website: javabeast.bplaced.net
 author: JavaBeast
 description: a advanced Plugin to help you and your Team control the server
+
+commands:
+  teamx:
+    permission: teamx.command.bypass
+  account:
+    permission: teamx.command.account
+  addperm:
+    permission: teamx.command.addperm

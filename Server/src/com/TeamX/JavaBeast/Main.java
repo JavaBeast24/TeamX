@@ -1,5 +1,8 @@
 package com.TeamX.JavaBeast;
 
+import com.TeamX.JavaBeast.Minecraft.AccountCommand;
+import com.TeamX.JavaBeast.Minecraft.AddPermCommand;
+import com.TeamX.JavaBeast.Minecraft.TeamXCommand;
 import com.TeamX.JavaBeast.Network.Data;
 import com.TeamX.JavaBeast.Network.MessageHandlers.*;
 import com.TeamX.JavaBeast.Network.MyEventHandler;
@@ -75,18 +78,24 @@ public class Main extends JavaPlugin {
                 server.registerMessageHandler(new SetPlayersMessage());
                 server.registerMessageHandler(new addPlayerMessage());
                 server.registerMessageHandler(new removePlayerMessage());
+                server.registerMessageHandler(new LoginMessage());
+                server.registerMessageHandler(new VerifiedMessage());
 
                 data = new Data(server);
             }else{
                 server.registerMessageHandler(new CodeMessage());
                 server.registerMessageHandler(new getSubPlayerAmountMessage());
                 server.registerMessageHandler(new getSubPlayersMessage());
+                server.registerMessageHandler(new VerifyMessage());
             }
             server.registerMessageHandler(new StopMessage());
         }
 
 
         Bukkit.getPluginManager().registerEvents(new MyEventHandler(), this);
+        getCommand("teamx").setExecutor(new TeamXCommand());
+        getCommand("account").setExecutor(new AccountCommand());
+        getCommand("addPerm").setExecutor(new AddPermCommand());
     }
 
     @Override

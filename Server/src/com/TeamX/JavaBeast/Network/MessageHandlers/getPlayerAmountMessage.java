@@ -3,6 +3,7 @@ package com.TeamX.JavaBeast.Network.MessageHandlers;
 import com.TeamX.JavaBeast.Main;
 import com.TeamX.JavaBeast.Server.Client;
 import com.TeamX.JavaBeast.Server.MessageHandler;
+import org.bukkit.Bukkit;
 
 public class getPlayerAmountMessage implements MessageHandler {
     @Override
@@ -20,6 +21,8 @@ public class getPlayerAmountMessage implements MessageHandler {
                     if(client.permissions.contains("TeamX.get.playerAmountOf")){
                         if(Main.getInstance().getData().serverPlayerAmount.containsKey(args[1])) {
                             client.sendStrMessage("setPlayerAmount " + args[1] + " " + Main.getInstance().getData().getAmountOfPlayersOn(args[1]));
+                        }else if(Main.getTeamXServer().getServerName().equals(args[1])){
+                            client.sendStrMessage("setPlayerAmount "+ args[1]+" "+ Bukkit.getOnlinePlayers().size());
                         }else
                             client.sendStrMessage("code 303 server_not_found");
                     }else

@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class MyEventHandler implements Listener {
 
@@ -21,15 +22,16 @@ public class MyEventHandler implements Listener {
     }
 
     @EventHandler
-    public void onClientConnect(ClientConnectEvent event){
-        event.getClient().permissions.add("TeamX.get.playerAmount");
-        event.getClient().permissions.add("TeamX.get.players");
-    }
-
-    @EventHandler
     public void onJoin(PlayerJoinEvent event){
         if(Main.getTeamXServer().isSubServer()){
             Main.getTeamXServer().StrToMain("addPlayer "+event.getPlayer().getName());
+        }
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event){
+        if(Main.getTeamXServer().isSubServer()){
+            Main.getTeamXServer().StrToMain("removePlayer "+event.getPlayer().getName());
         }
     }
 

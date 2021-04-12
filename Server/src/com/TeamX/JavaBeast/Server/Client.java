@@ -1,6 +1,7 @@
 package com.TeamX.JavaBeast.Server;
 
 import com.TeamX.JavaBeast.Main;
+import com.TeamX.JavaBeast.Network.Account;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -24,7 +25,7 @@ public class Client {
 
     private final int receiveBufferSize;
 
-    public final List<String> permissions = new ArrayList<>();
+    public List<String> permissions = new ArrayList<>();
 
     public Client(Socket socket, String name, boolean isSubServer, int receiveBufferSize) {
         this.socket = socket;
