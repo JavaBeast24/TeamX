@@ -39,5 +39,17 @@ public class Broadcaster {
 
 
     }
+    public static void BroadCastMaximum(){
+
+        Data data = Main.getInstance().getData();
+
+        for(Client client:Main.getTeamXServer().CLIENTS){
+            client.sendStrMessage("setMaximum "+data.getMaximum());
+
+            for(Client server:Main.getTeamXServer().subServer){
+                client.sendStrMessage("setMaximum "+server.getName()+" "+data.getMaximumOf(server.getName()));
+            }
+        }
+    }
 
 }

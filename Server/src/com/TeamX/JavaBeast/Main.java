@@ -1,8 +1,6 @@
 package com.TeamX.JavaBeast;
 
-import com.TeamX.JavaBeast.Minecraft.AccountCommand;
-import com.TeamX.JavaBeast.Minecraft.AddPermCommand;
-import com.TeamX.JavaBeast.Minecraft.TeamXCommand;
+import com.TeamX.JavaBeast.Minecraft.*;
 import com.TeamX.JavaBeast.Network.Data;
 import com.TeamX.JavaBeast.Network.MessageHandlers.*;
 import com.TeamX.JavaBeast.Network.MyEventHandler;
@@ -80,6 +78,13 @@ public class Main extends JavaPlugin {
                 server.registerMessageHandler(new removePlayerMessage());
                 server.registerMessageHandler(new LoginMessage());
                 server.registerMessageHandler(new VerifiedMessage());
+                server.registerMessageHandler(new getServersMessage());
+                server.registerMessageHandler(new setMaximumPlayers());
+                server.registerMessageHandler(new getMainServer());
+                server.registerMessageHandler(new getReceiveBufferSize());
+                server.registerMessageHandler(new getIsSubServer());
+                server.registerMessageHandler(new getAddress());
+                server.registerMessageHandler(new setPort());
 
                 data = new Data(server);
             }else{
@@ -89,6 +94,10 @@ public class Main extends JavaPlugin {
                 server.registerMessageHandler(new VerifyMessage());
             }
             server.registerMessageHandler(new StopMessage());
+            server.registerMessageHandler(new ReloadNetworkMessage());
+            server.registerMessageHandler(new consoleCmdMessage());
+            server.registerMessageHandler(new stopNetworkMessage());
+            server.registerMessageHandler(new getMaximumPlayers());
         }
 
 
@@ -96,6 +105,8 @@ public class Main extends JavaPlugin {
         getCommand("teamx").setExecutor(new TeamXCommand());
         getCommand("account").setExecutor(new AccountCommand());
         getCommand("addPerm").setExecutor(new AddPermCommand());
+        getCommand("removePerm").setExecutor(new RemovePermCommand());
+        getCommand("reloadnetwork").setExecutor(new ReloadNetworkCommand());
     }
 
     @Override

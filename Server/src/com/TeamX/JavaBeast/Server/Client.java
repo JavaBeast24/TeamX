@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Client {
 
-    private final Socket socket;
+    public final Socket socket;
     private String name;
     private boolean isSubServer;
 
@@ -124,6 +124,8 @@ public class Client {
             DataOutputStream outputStream = new DataOutputStream(socket.getOutputStream());
             outputStream.write((msg+"/").getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
+
+            Main.getCmd().sendMessage("[§bTeamX§7]§a sent: "+msg);
             return true;
         }catch(Exception exception){
             Main.getCmd().sendMessage("[§bTeamX§7] §4Error while sending message : "+exception.getMessage()+" -> disconnecting client");

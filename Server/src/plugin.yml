@@ -13,3 +13,7 @@ commands:
     permission: teamx.command.account
   addperm:
     permission: teamx.command.addperm
+  removeperm:
+    permission: teamx.command.removeperm
+  reloadnetwork:
+    permission: teamx.command.reloadnetwork

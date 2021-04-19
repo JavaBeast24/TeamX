@@ -15,6 +15,8 @@ public class Data {
 
     public final HashMap<String, Integer> serverPlayerAmount = new HashMap<>();
     public final HashMap<String, List<String>> serverPlayers = new HashMap<>();
+    public final HashMap<String, Integer> maximumPlayers = new HashMap<>();
+    public final HashMap<String, String> serverPorts = new HashMap<>();
 
     public Data(Server server){
         this.server = server;
@@ -44,6 +46,24 @@ public class Data {
 
         return list;
     }
+    public int getMaximum(){
+        int maximum = 0;
+
+        for(int i: maximumPlayers.values()){
+            maximum+=i;
+        }
+
+        maximum+= Bukkit.getServer().getMaxPlayers();
+
+        return maximum;
+    }
+    public List<Player> getRegistered(){
+        //TODO: load registered players from registered.yml
+        return null;
+    }
+    public String getPort(){
+        return String.valueOf(Main.getInstance().getServer().getPort());
+    }
 
     public int getAmountOfPlayersOn(String server){
 
@@ -66,5 +86,27 @@ public class Data {
 
         return list;
     }
+    public int getMaximumOf(String server){
+        if(maximumPlayers.containsKey(server)){
+            return maximumPlayers.get(server);
+        }
 
+        if(Main.getTeamXServer().getServerName().equals(server)){
+            return Main.getInstance().getServer().getMaxPlayers();
+        }
+
+        return 0;
+    }
+    public List<Player> getRegisteredOf(String server){
+        //TODO: load registered players of the given server from registered.yml
+        return null;
+    }
+    public String getPortOf(String server){
+
+        if(server.equals(Main.getTeamXServer().getServerName())){
+            return String.valueOf(Main.getInstance().getServer().getPort());
+        }
+
+        return serverPorts.get(server);
+    }
 }

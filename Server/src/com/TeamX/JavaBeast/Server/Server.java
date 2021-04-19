@@ -35,7 +35,7 @@ public class Server {
     private boolean isSubServer;
     private String mainServer;
     private String serverName;
-    private ServerSocket serverSocket;
+    public ServerSocket serverSocket;
     private Socket socket;
 
     private final List<MessageHandler> messageHandlers = new ArrayList<>();
@@ -162,6 +162,7 @@ public class Server {
                 Receive();
 
                 StrToMain("subServer "+serverName);
+                StrToMain("setPort "+Main.getInstance().getServer().getPort());
             }catch (Exception exception){
                 Main.getCmd().sendMessage("[§bTeamX§7]§4 failed to connect to server : " + exception.getMessage() + " -> disabling plugin.");
                 Bukkit.getPluginManager().disablePlugin(Main.getInstance());

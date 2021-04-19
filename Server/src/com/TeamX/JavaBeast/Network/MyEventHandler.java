@@ -1,6 +1,5 @@
 package com.TeamX.JavaBeast.Network;
 
-import com.TeamX.JavaBeast.Events.ClientConnectEvent;
 import com.TeamX.JavaBeast.Events.ClientRegisterAsSubServerEvent;
 import com.TeamX.JavaBeast.Main;
 import org.bukkit.Bukkit;
@@ -17,6 +16,7 @@ public class MyEventHandler implements Listener {
             @Override
             public void run() {
                 event.getClient().sendStrMessage("getSubPlayers");
+                event.getClient().sendStrMessage("getMaximum");
             }
         }, 1L);
     }
@@ -25,6 +25,8 @@ public class MyEventHandler implements Listener {
     public void onJoin(PlayerJoinEvent event){
         if(Main.getTeamXServer().isSubServer()){
             Main.getTeamXServer().StrToMain("addPlayer "+event.getPlayer().getName());
+        }else{
+            Broadcaster.BroadCastPlayers();
         }
     }
 
@@ -32,6 +34,13 @@ public class MyEventHandler implements Listener {
     public void onQuit(PlayerQuitEvent event){
         if(Main.getTeamXServer().isSubServer()){
             Main.getTeamXServer().StrToMain("removePlayer "+event.getPlayer().getName());
+        }else{
+            Bukkit.getScheduler().runTaskLater(Main.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    Broadcaster.BroadCastPlayers();
+                }
+            }, 5L);
         }
     }
 

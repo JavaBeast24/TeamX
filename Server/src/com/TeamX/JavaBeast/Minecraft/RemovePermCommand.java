@@ -1,8 +1,6 @@
 package com.TeamX.JavaBeast.Minecraft;
 
-import com.TeamX.JavaBeast.Main;
 import com.TeamX.JavaBeast.Network.Account;
-import com.TeamX.JavaBeast.Network.Permissions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -10,10 +8,9 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-public class AddPermCommand implements CommandExecutor, TabCompleter {
+public class RemovePermCommand implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
 
@@ -22,25 +19,25 @@ public class AddPermCommand implements CommandExecutor, TabCompleter {
                 Player player = (Player) sender;
 
                 List<String> new_permissions = Account.getPermissions(player.getName());
-                new_permissions.add(args[0]);
+                new_permissions.remove(args[0]);
 
                 Account.setPermissions(new_permissions, player.getName());
 
-                player.sendMessage("[§bTeamX§7]§a added permission.");
+                player.sendMessage("[§bTeamX§7]§a removed permission.");
             }else
                 sender.sendMessage("[§bTeamX§§7]§4 Only players can use this command.");
         }else
-            sender.sendMessage("[§bTeamX§7]§4 usage: /addPerm <permission>");
+            sender.sendMessage("[§bTeamX§7]§4 usage: /removePerm <permission>");
 
         return false;
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
         List<String> list = new ArrayList<>();
 
         if(args.length == 1){
-            list = Arrays.asList(Permissions.permissions);
+            list = Account.getPermissions(sender.getName());
         }
 
         return list;
