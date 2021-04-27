@@ -23,7 +23,7 @@ public class ReloadNetworkMessage implements MessageHandler {
                     public void run() {
                         Main.getInstance().getServer().dispatchCommand(Main.getInstance().getServer().getConsoleSender(), "rl");
                     }
-                }, 10L);
+                }, 1L);
             }
         }
     }

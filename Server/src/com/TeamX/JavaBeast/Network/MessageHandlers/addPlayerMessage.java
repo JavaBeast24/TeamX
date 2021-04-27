@@ -39,6 +39,10 @@ public class addPlayerMessage implements MessageHandler {
 
                     Broadcaster.BroadCastPlayers();
 
+                    data.register(args[1], client.getName());
+
+                    Broadcaster.BroadCastRegister();
+
                     client.sendStrMessage("code 0");
                 }else
                     client.sendStrMessage("code 302");

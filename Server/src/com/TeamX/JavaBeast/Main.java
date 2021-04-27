@@ -4,6 +4,7 @@ import com.TeamX.JavaBeast.Minecraft.*;
 import com.TeamX.JavaBeast.Network.Data;
 import com.TeamX.JavaBeast.Network.MessageHandlers.*;
 import com.TeamX.JavaBeast.Network.MyEventHandler;
+import com.TeamX.JavaBeast.Server.Client;
 import com.TeamX.JavaBeast.Server.MessageHandlers.CodeMessage;
 import com.TeamX.JavaBeast.Server.MessageHandlers.StopMessage;
 import com.TeamX.JavaBeast.Server.MessageHandlers.SubServerMessage;
@@ -12,6 +13,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main extends JavaPlugin {
 
@@ -85,6 +90,10 @@ public class Main extends JavaPlugin {
                 server.registerMessageHandler(new getIsSubServer());
                 server.registerMessageHandler(new getAddress());
                 server.registerMessageHandler(new setPort());
+                server.registerMessageHandler(new getRegistered());
+                server.registerMessageHandler(new getTodayRegistered());
+                server.registerMessageHandler(new getTodayJoined());
+                server.registerMessageHandler(new consoleInfoMessage());
 
                 data = new Data(server);
             }else{
@@ -111,6 +120,25 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+
+
+        if(data != null) {
+            FileConfiguration config = data.registered;
+            config.set("registeredToday", new ArrayList<>());
+            config.set("joinedToday", new ArrayList<>());
+
+            for (Client client : server.subServer) {
+                config.set("registeredToday_." + client.getName(), new ArrayList<>());
+                config.set("joinedToday_." + client.getName(), new ArrayList<>());
+            }
+
+            try {
+                config.save(new File(Main.getInstance().getDataFolder() + "/registered.yml"));
+            } catch (IOException exception) {
+            }
+        }
+
+
         Main.server.stop();
     }
 

@@ -52,4 +52,22 @@ public class Broadcaster {
         }
     }
 
+    public static void BroadCastRegister(){
+        Data data = Main.getInstance().getData();
+
+        for(Client client:Main.getTeamXServer().CLIENTS){
+
+            for(Client server:Main.getTeamXServer().subServer){
+                client.sendStrMessage("setTodayJoined "+server.getName()+" "+Main.getInstance().getData().getTodayJoinedOf(server.getName()).size());
+                client.sendStrMessage("setTodayRegistered "+server.getName()+" "+Main.getInstance().getData().getRegisteredTodayOf(server.getName()).size());
+                client.sendStrMessage("setRegistered "+server.getName()+" "+Main.getInstance().getData().getRegisteredOf(server.getName()).size());
+            }
+        }
+    }
+
+    public static void BroadCastConsoleInfo(String info, String server){
+        for(Client client:Main.getTeamXServer().CLIENTS){
+            client.sendStrMessage("consoleInfo "+server+" "+info.replace(" ", "_"));
+        }
+    }
 }

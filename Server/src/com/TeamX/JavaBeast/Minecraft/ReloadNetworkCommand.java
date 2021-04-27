@@ -13,8 +13,10 @@ public class ReloadNetworkCommand implements CommandExecutor {
 
             if(Main.getTeamXServer().isSubServer()){
                Main.getTeamXServer().StrToMain("reloadnetwork");
-            }else
+            }else {
                 Main.getTeamXServer().StrToAllClients("reloadnetwork");
+                Main.getInstance().getServer().dispatchCommand(Main.getInstance().getServer().getConsoleSender(), "rl");
+            }
 
             sender.sendMessage("[§bTeamX§7]§a reloading network.");
 

@@ -19,6 +19,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import java.awt.Font;
@@ -46,6 +48,8 @@ public class Client extends JFrame {
 	private JLabel isSubServer;
 	private JLabel receiveBufferSize;
 	private JLabel mainServer;
+	
+	private JTextArea log;
 	
 	private String selectedServer;
 	
@@ -141,10 +145,20 @@ public class Client extends JFrame {
 		btnNewButton_1.setBorder(new LineBorder(new Color(0,0,0)));
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				reload(selectedServer);
 			}
 		});
 		btnNewButton_1.setBounds(642, 11, 89, 23);
 		layeredPane_1.add(btnNewButton_1);
+		
+		JButton btnNewButton_1_1 = new JButton("Players");
+		btnNewButton_1_1.setToolTipText("open player options");
+		btnNewButton_1_1.setForeground(Color.LIGHT_GRAY);
+		btnNewButton_1_1.setFont(new Font("Courier New", Font.PLAIN, 11));
+		btnNewButton_1_1.setBorder(new LineBorder(new Color(0,0,0)));
+		btnNewButton_1_1.setBackground(Color.DARK_GRAY);
+		btnNewButton_1_1.setBounds(543, 11, 89, 23);
+		//layeredPane_1.add(btnNewButton_1_1);
 		
 		JLayeredPane layeredPane_2 = new JLayeredPane();
 		layeredPane_2.setBorder(new LineBorder(new Color(0, 0, 0)));
@@ -321,7 +335,8 @@ public class Client extends JFrame {
 		textArea.setLineWrap(true);
 		textArea.setForeground(Color.LIGHT_GRAY);
 		textArea.setBackground(Color.DARK_GRAY);
-		textArea.setBounds(50, 11, 479, 377);
+		textArea.setBounds(10, 0, 479, 377);
+		log = textArea;
 		layeredPane_7.add(textArea);
 		
 		JLayeredPane layeredPane_8 = new JLayeredPane();
@@ -333,9 +348,25 @@ public class Client extends JFrame {
 		textField.setBackground(Color.DARK_GRAY);
 		textField.setForeground(Color.LIGHT_GRAY);
 		textField.setFont(new Font("Courier New", Font.PLAIN, 11));
-		textField.setBounds(0, 0, 499, 24);
+		textField.setBounds(0, 0, 400, 24);
 		layeredPane_8.add(textField);
 		textField.setColumns(10);
+		
+		JButton btnNewButton_2 = new JButton("Send");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String cmd = textField.getText().replace(" ", "_");
+				if(selectedServer.equals("all")) {
+					Connection.sendStr("consoleCmd all "+cmd);
+				}else
+					Connection.sendStr("consoleCmd "+selectedServer+" "+cmd);
+			}
+		});
+		btnNewButton_2.setBackground(Color.DARK_GRAY);
+		btnNewButton_2.setForeground(Color.LIGHT_GRAY);
+		btnNewButton_2.setFont(new Font("Courier New", Font.PLAIN, 11));
+		btnNewButton_2.setBounds(410, 0, 89, 23);
+		layeredPane_8.add(btnNewButton_2);
 		
 		JLabel lblNewLabel_11 = new JLabel("Console:");
 		lblNewLabel_11.setFont(new Font("Courier New", Font.PLAIN, 11));
@@ -348,36 +379,25 @@ public class Client extends JFrame {
 		layeredPane_9.setBounds(10, 354, 291, 114);
 		layeredPane_2.add(layeredPane_9);
 		
-		JButton reload_btn = new JButton("reload");
-		reload_btn.addActionListener(new ActionListener() {
+		JButton reload_network_btn = new JButton("reload network");
+		reload_network_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				Connection.sendStr("reloadnetwork");
 			}
 		});
-		reload_btn.setBackground(Color.DARK_GRAY);
-		reload_btn.setFont(new Font("Courier New", Font.PLAIN, 11));
-		reload_btn.setForeground(Color.GREEN);
-		reload_btn.setBounds(53, 11, 89, 23);
-		reload_btn.setBorder(new LineBorder(new Color(0,0,0)));
-		layeredPane_9.add(reload_btn);
-		
-		JButton stop_btn = new JButton("stop");
-		stop_btn.setBackground(Color.DARK_GRAY);
-		stop_btn.setFont(new Font("Courier New", Font.PLAIN, 11));
-		stop_btn.setForeground(Color.RED);
-		stop_btn.setBounds(152, 11, 89, 23);
-		stop_btn.setBorder(new LineBorder(new Color(0,0,0)));
-		layeredPane_9.add(stop_btn);
-		
-		JButton reload_network_btn = new JButton("reload network");
 		reload_network_btn.setBackground(Color.DARK_GRAY);
 		reload_network_btn.setFont(new Font("Courier New", Font.PLAIN, 11));
 		reload_network_btn.setForeground(Color.GREEN);
-		reload_network_btn.setBounds(53, 45, 188, 23);
+		reload_network_btn.setBounds(53, 11, 188, 23);
 		reload_network_btn.setBorder(new LineBorder(new Color(0,0,0)));
 		layeredPane_9.add(reload_network_btn);
 		
 		JButton stop_network_btn = new JButton("stop network");
+		stop_network_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Connection.sendStr("stopnetwork");
+			}
+		});
 		stop_network_btn.setBackground(Color.DARK_GRAY);
 		stop_network_btn.setFont(new Font("Courier New", Font.PLAIN, 11));
 		stop_network_btn.setForeground(Color.RED);
@@ -400,10 +420,6 @@ public class Client extends JFrame {
 	}
 
 	private void onStart() {
-		/*
-		 * TODO:
-		 * - load config of active server
-		 */
 		
 		Connection.addHandler(new MessageHandler() {
 			
@@ -544,6 +560,88 @@ public class Client extends JFrame {
 			}
 		});
 		
+		Connection.addHandler(new MessageHandler() {
+			
+			@Override
+			public void handle(String strMsg, byte[] byteMsg) {
+			
+				if(strMsg.startsWith("setRegistered")) {
+					String[] args = strMsg.split(" ");
+					if(args.length == 3) {
+						if(args[1].equals(selectedServer)) {
+							setRegistered(args[2]);
+						}
+					}
+				}
+				
+			}
+		});
+		
+		Connection.addHandler(new MessageHandler() {
+			
+			@Override
+			public void handle(String strMsg, byte[] byteMsg) {
+				if(strMsg.startsWith("setTodayRegistered")) {
+					String[] args = strMsg.split(" ");
+					if(args.length == 3) {
+						if(args[1].equals(selectedServer)) {
+							setTodayRegistered(args[2]);
+						}
+					}
+				}
+			}
+		});
+		
+		Connection.addHandler(new MessageHandler() {
+			
+			@Override
+			public void handle(String strMsg, byte[] byteMsg) {
+				if(strMsg.startsWith("setTodayJoined")) {
+					String[] args = strMsg.split(" ");
+					if(args.length == 3) {
+						if(args[1].equals(selectedServer)) {
+							setTodayJoined(args[2]);
+						}
+					}
+				}
+			}
+		});
+		
+		Connection.addHandler(new MessageHandler() {
+			
+			@Override
+			public void handle(String strMsg, byte[] byteMsg) {
+				if(strMsg.startsWith("consoleInfo")) {
+					String[] args = strMsg.split(" ");
+					String server = args[1];
+					String info = args[2];
+					if(server.equals(selectedServer)) {
+						
+						List<String> log = getLog();
+						 
+						if(log.size() >= 27) {
+							log.remove(0);
+						}
+						
+						log.add(info.replace("_", " ").replace("\\", "/"));
+						
+						setLog(log);
+					}else if(selectedServer.equals("all")) {
+						
+						List<String> log = getLog();
+						 
+						if(log.size() >= 27) {
+							log.remove(0);
+						}
+						
+						log.add(info.replace("_", " ").replace("\\", "/")+"("+server+")");
+						
+						setLog(log);
+					}
+				}
+			}
+		});
+		
 		Connection.sendStr("getServers");
 		Connection.sendStr("getPlayerAmount");
 		Connection.sendStr("getMaximum");
@@ -551,6 +649,9 @@ public class Client extends JFrame {
 		Connection.sendStr("getMainServer");
 		Connection.sendStr("getReceiveBufferSize");
 		Connection.sendStr("getIsSubServer "+selectedServer);
+		Connection.sendStr("getRegistered");
+		Connection.sendStr("getTodayRegistered");
+		Connection.sendStr("getTodayJoined");
 	}
 	
 	public static void loadData(String server) {
@@ -559,14 +660,27 @@ public class Client extends JFrame {
 		if(server.equals("all")) {
 			Connection.sendStr("getPlayerAmount");
 			Connection.sendStr("getMaximum");
+			Connection.sendStr("getRegistered");
+			Connection.sendStr("getTodayRegistered");
+			Connection.sendStr("getTodayJoined");
 		}else {
 			Connection.sendStr("getPlayerAmount "+server);
 			Connection.sendStr("getMaximum "+server);	
+			Connection.sendStr("getRegistered "+server);
+			Connection.sendStr("getTodayRegistered "+server);
+			Connection.sendStr("getTodayJoined "+server);
+			setLog(new ArrayList<>());
 		}
 		Connection.sendStr("getAddress "+server);
 		Connection.sendStr("getMainServer");
 		Connection.sendStr("getReceiveBufferSize");
 		Connection.sendStr("getIsSubServer "+server);
+	}
+	
+	public static void reload(String server) {
+		Connection.sendStr("getServers");
+		
+		loadData(server);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -609,5 +723,39 @@ public class Client extends JFrame {
 	
 	public static void setOnline(int online) {
 		self.Online.setText(online+"");
+	}
+	
+	public static void setRegistered(String registered) {
+		self.Registered.setText(registered);
+	}
+	
+	public static void setTodayRegistered(String registered) {
+		self.Today_registered.setText(registered);
+	}
+	
+	public static void setTodayJoined(String joined) {
+		self.Today_joined.setText(joined);
+	}
+	
+	public static void setLog(List<String> log) {
+		
+		StringBuilder string = new StringBuilder();
+		for(String s:log) {
+			string.append(s+"\n");
+		}
+		
+		self.log.setText(string.toString());
+	}
+	
+	public static List<String> getLog(){
+		String _log = self.log.getText();
+		List<String> log = new ArrayList<>();
+		
+		String[] __log__ = _log.split("\n");
+		for(String s:__log__) {
+			log.add(s);
+		}
+		
+		return log;
 	}
 }

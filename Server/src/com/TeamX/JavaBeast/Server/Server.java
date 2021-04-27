@@ -280,9 +280,11 @@ public class Server {
 
     public void Log(String _log) {
         if (createLog) {
-            FileConfiguration log = getLog();
-            log.set(getLogTime(), _log);
-            saveLog(log);
+            try {
+                FileConfiguration log = getLog();
+                log.set(getLogTime(), _log);
+                saveLog(log);
+            }catch(Exception exception) { }
         }
     }
 
@@ -326,8 +328,9 @@ public class Server {
     }
 
     public void StrToAllClients(String msg) {
-        for (Client client : clients) {
-            client.sendStrMessage(msg);
+        List<Client> _clients = clients;
+        for(int i = 0; i < _clients.size(); i++){
+            _clients.get(i).sendStrMessage(msg);
         }
     }
 

@@ -35,6 +35,7 @@ public class SetPlayersMessage implements MessageHandler {
                     Main.getInstance().getData().serverPlayerAmount.put(server, 0);
 
                     Broadcaster.BroadCastPlayers();
+                    Broadcaster.BroadCastRegister();
 
                     client.sendStrMessage("code 0");
                 }else
