@@ -2,7 +2,11 @@ package com.JavaBeast.test.Client;
 
 import java.util.Scanner;
 
-public class Main {
+/*
+ * this project connects to the server and
+ * loggs in
+ */
+public class DefaultConnection {
 
 	public static void main(String[] args) {
 		
@@ -37,6 +41,8 @@ public class Main {
 		if(Connection.tryConnect(ip, port, username, password)) {
 			
 			//print out 'connected!' if connection was established
+			//and we are logged in
+			//the client should now automaticly listen for messages from the server
 			System.out.println("connected!");
 			
 			
